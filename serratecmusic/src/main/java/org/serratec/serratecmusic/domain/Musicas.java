@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.serratec.serratecmusic.enums.GeneroMusical;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -58,7 +56,6 @@ public class Musicas {
 		this.artistas = artistas;
 	}
 
-	// Getters e setters
 	public Long getId() {
 		return id;
 	}

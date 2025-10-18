@@ -53,38 +53,33 @@ public class MusicasController {
 	public Musicas criarMusica(@Valid @RequestBody Musicas musicas) {
 		return musicasRepository.save(musicas);
 	}
-	
-	
+
 	@Operation(summary = "Atualiza uma musica pelo id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Musica atualizada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Musica informado não foi encontrado"),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-    })
-    @PutMapping("/{id}")
-    public ResponseEntity<Musicas> atualizar(@Valid @RequestBody Musicas musicas, @PathVariable Long id){
-        Optional<Musicas> optionalMusica = musicasRepository.findById(id);
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Musica atualizada com sucesso"),
+			@ApiResponse(responseCode = "404", description = "Musica informado não foi encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
+	@PutMapping("/{id}")
+	public ResponseEntity<Musicas> atualizar(@Valid @RequestBody Musicas musicas, @PathVariable Long id) {
+		Optional<Musicas> optionalMusica = musicasRepository.findById(id);
 
-        if(optionalMusica.isPresent()) {
-            musicas.setId(id);
-            musicasRepository.save(musicas);
-            return ResponseEntity.ok(optionalMusica.get());
-        }
-        return ResponseEntity.notFound().build();
-    }
+		if (optionalMusica.isPresent()) {
+			musicas.setId(id);
+			musicasRepository.save(musicas);
+			return ResponseEntity.ok(optionalMusica.get());
+		}
+		return ResponseEntity.notFound().build();
+	}
 
-    @Operation(summary = "Deleta uma musica pelo id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Musica deletada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Musica informado não foi encontrado"),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-    })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        if (musicasRepository.existsById(id)) {
+	@Operation(summary = "Deleta uma musica pelo id")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Musica deletada com sucesso"),
+			@ApiResponse(responseCode = "404", description = "Musica informado não foi encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deletar(@PathVariable Long id) {
+		if (musicasRepository.existsById(id)) {
 			musicasRepository.deleteById(id);
 			return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
-    }
+		}
+		return ResponseEntity.notFound().build();
+	}
 }

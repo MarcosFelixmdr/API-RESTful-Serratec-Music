@@ -42,7 +42,6 @@ public class Perfil {
 	@OneToOne(mappedBy = "perfil")
 	private Usuarios usuario;
 
-	// Getters e setters
 	public Long getId() {
 		return id;
 	}

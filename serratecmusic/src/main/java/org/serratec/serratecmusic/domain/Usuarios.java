@@ -41,9 +41,9 @@ public class Usuarios {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "perfil_id", referencedColumnName = "id")
 	private Perfil perfil;
-	
+
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Playlists> playlists;
+	private List<Playlists> playlists;
 
 	public Usuarios() {
 		super();
