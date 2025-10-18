@@ -44,12 +44,10 @@ public class Musicas {
 	@Enumerated(EnumType.STRING)
 	private GeneroMusical generoMusical;
 
-	@JsonBackReference
 	@ManyToMany(mappedBy = "musicas")
 	private List<Artistas> artistas;
 
 	public Musicas() {
-		super();
 	}
 
 	public Musicas(Long id, String titulo, Integer minutos, GeneroMusical generoMusical, List<Artistas> artistas) {
@@ -60,6 +58,7 @@ public class Musicas {
 		this.artistas = artistas;
 	}
 
+	// Getters e setters
 	public Long getId() {
 		return id;
 	}

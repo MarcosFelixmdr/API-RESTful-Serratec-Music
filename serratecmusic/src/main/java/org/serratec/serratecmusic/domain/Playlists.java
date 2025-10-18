@@ -2,7 +2,7 @@ package org.serratec.serratecmusic.domain;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -37,10 +38,27 @@ public class Playlists {
 	@Column(nullable = false)
 	private String descricao;
 
-	@JsonManagedReference
 	@ManyToMany
 	@JoinTable(name = "playlist_musica", joinColumns = @JoinColumn(name = "playlist_id"), inverseJoinColumns = @JoinColumn(name = "musica_id"))
 	private List<Musicas> musicas;
+
+	@ManyToOne
+	@JoinColumn(name = "usuario_id", nullable = false)
+	private Usuarios usuario;
+
+	@JsonProperty("usuario_id")
+	public void setUsuarioId(Long usuarioId) {
+		this.usuario = new Usuarios();
+		this.usuario.setId(usuarioId);
+	}
+
+	public Usuarios getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuarios usuario) {
+		this.usuario = usuario;
+	}
 
 	public Playlists() {
 		super();

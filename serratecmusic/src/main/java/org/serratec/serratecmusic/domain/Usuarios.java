@@ -1,11 +1,17 @@
 package org.serratec.serratecmusic.domain;
 
+import java.util.List;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,19 +35,25 @@ public class Usuarios {
 	@Email(message = "O e-mail informado é inválido")
 	@Size(min = 2, max = 100)
 	@NotBlank(message = "O e-mail é obrigatório")
+	@Column(nullable = false, unique = true)
 	private String email;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "perfil_id", referencedColumnName = "id")
+	private Perfil perfil;
+	
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Playlists> playlists;
 
 	public Usuarios() {
 		super();
 	}
 
-	public Usuarios(Long id,
-			@NotBlank(message = "O nome do usuário é obrigatório") @Size(min = 2, max = 100) String nome,
-			@Email(message = "O e-mail informado é inválido") @Size(min = 2, max = 100) @NotBlank(message = "O e-mail é obrigatório") String email) {
-		super();
+	public Usuarios(Long id, String nome, String email, Perfil perfil) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
+		this.perfil = perfil;
 	}
 
 	public Long getId() {
@@ -68,4 +80,11 @@ public class Usuarios {
 		this.email = email;
 	}
 
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
+	}
 }

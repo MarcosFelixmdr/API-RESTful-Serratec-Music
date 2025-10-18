@@ -1,9 +1,19 @@
 package org.serratec.serratecmusic.domain;
 
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -27,13 +37,11 @@ public class Artistas {
 	@Column(nullable = false)
 	private String nacionalidade;
 
-	@JsonManagedReference
 	@ManyToMany
 	@JoinTable(name = "artista_musica", joinColumns = @JoinColumn(name = "artista_id"), inverseJoinColumns = @JoinColumn(name = "musica_id"))
 	private List<Musicas> musicas;
 
 	public Artistas() {
-		super();
 	}
 
 	public Artistas(Long id, String nome, String nacionalidade, List<Musicas> musicas) {
@@ -43,6 +51,7 @@ public class Artistas {
 		this.musicas = musicas;
 	}
 
+	// Getters e setters
 	public Long getId() {
 		return id;
 	}

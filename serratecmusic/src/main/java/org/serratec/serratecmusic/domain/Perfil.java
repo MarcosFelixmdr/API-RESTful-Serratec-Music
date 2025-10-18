@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
@@ -34,26 +35,14 @@ public class Perfil {
 	private String telefone;
 
 	@Schema(description = "Data de nascimento")
-	@NotBlank(message = "A data de nascimento é obrigatória")
 	@PastOrPresent(message = "A data de nascimento não pode ser no futuro")
-	@Size(max = 8, message = "A data de nascimento informada deve ser no formato: DD/MM/AAAA")
 	@Column(nullable = false)
 	private LocalDate dataNascimento;
 
-	public Perfil() {
-		super();
-	}
+	@OneToOne(mappedBy = "perfil")
+	private Usuarios usuario;
 
-	public Perfil(Long id, @NotBlank(message = "O nome do perfil é obrigatório") @Size(min = 2, max = 100) String nome,
-			@NotBlank(message = "Telefone é obrigatório") @Size(max = 15, message = "Telefone deve ter no máximo 15 caracteres") String telefone,
-			@NotBlank(message = "A data de nascimento é obrigatória") @PastOrPresent(message = "A data de nascimento não pode ser no futuro") @Size(max = 8, message = "A data de nascimento informada deve ser no formato: DD/MM/AAAA") LocalDate dataNascimento) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.telefone = telefone;
-		this.dataNascimento = dataNascimento;
-	}
-
+	// Getters e setters
 	public Long getId() {
 		return id;
 	}
@@ -86,4 +75,11 @@ public class Perfil {
 		this.dataNascimento = dataNascimento;
 	}
 
+	public Usuarios getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuarios usuario) {
+		this.usuario = usuario;
+	}
 }

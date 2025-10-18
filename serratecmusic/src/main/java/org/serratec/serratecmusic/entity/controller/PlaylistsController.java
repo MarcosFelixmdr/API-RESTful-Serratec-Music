@@ -1,9 +1,12 @@
 package org.serratec.serratecmusic.entity.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.serratec.serratecmusic.domain.Musicas;
 import org.serratec.serratecmusic.domain.Playlists;
+import org.serratec.serratecmusic.repository.MusicasRepository;
 import org.serratec.serratecmusic.repository.PlaylistsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,9 @@ public class PlaylistsController {
 
 	@Autowired
 	private PlaylistsRepository playlistsRepository;
+
+	@Autowired
+	private MusicasRepository musicasRepository;
 
 	@Operation(summary = "Lista todas as playlists", description = "Retorna uma lista com todas as playlists cadastradas no banco de dados.")
 	@ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
@@ -59,12 +65,34 @@ public class PlaylistsController {
 			@ApiResponse(responseCode = "404", description = "Playlist informado não foi encontrado"),
 			@ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
 	@PutMapping("/{id}")
-	public ResponseEntity<Playlists> atualizar(@Valid @RequestBody Playlists playLists, @PathVariable Long id) {
-		if (playlistsRepository.existsById(id)) {
-			playLists.setId(id);
-			return ResponseEntity.ok(playlistsRepository.save(playLists));
+	public ResponseEntity<Playlists> atualizarPlaylist(@Valid @RequestBody Playlists playLists, @PathVariable Long id) {
+		Optional<Playlists> optionalPlaylist = playlistsRepository.findById(id);
+		if (optionalPlaylist.isEmpty()) {
+			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.notFound().build();
+
+		Playlists playlistExistente = optionalPlaylist.get();
+
+		playlistExistente.setNome(playLists.getNome());
+		playlistExistente.setDescricao(playLists.getDescricao());
+
+		if (playLists.getUsuario() != null) {
+			playlistExistente.setUsuario(playLists.getUsuario());
+		}
+
+		if (playLists.getMusicas() != null) {
+			List<Musicas> novasMusicas = new ArrayList<>();
+
+			for (Musicas musica : playLists.getMusicas()) {
+				musicasRepository.findById(musica.getId()).ifPresent(novasMusicas::add);
+			}
+
+			playlistExistente.setMusicas(novasMusicas);
+
+		}
+
+		Playlists playlistAtualizada = playlistsRepository.save(playlistExistente);
+		return ResponseEntity.ok(playlistAtualizada);
 	}
 
 	@Operation(summary = "Deletar uma playList pelo ID")
